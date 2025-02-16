@@ -106,6 +106,7 @@ impl<'a> Default for LocalConfig<'a> {
     }
 }
 
+#[derive(Debug)]
 pub struct ResultVULP {
     pub full_line: Vec<u8>,
     pub credits: Vec<u8>,

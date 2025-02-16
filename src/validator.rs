@@ -3,7 +3,7 @@ use memchr::memmem::{self, Finder};
 use smallvec::SmallVec;
 use url::{Host, Url};
 use vc::{is_valid_email, is_valid_login, is_valid_phone_number};
-use crate::{enums::{DataEnum, LineEnum, ValidationError}, schema::{LocalConfig, VULP}};
+use crate::{enums::{DataEnum, LineEnum, ValidationError}, schema::{LocalConfig, VULP}, ResultVULP};
 
 static ANDROID_FIND: LazyLock<Finder<'static>> = LazyLock::new(|| memmem::Finder::new(b"==@"));
 static HTTP_FIND: LazyLock<Finder<'static>> = LazyLock::new(|| memmem::Finder::new(b"http://"));
@@ -309,7 +309,7 @@ impl<'a> VULP<'a> {
     }
 
     #[inline(always)]
-    pub fn validate(&mut self, line: &'a [u8]) -> Result<Self, ValidationError> {
+    pub fn validate(&mut self, line: &'a [u8]) -> Result<ResultVULP, ValidationError> {
         self.login = None;
         self.password = None;
         self.url = None;
@@ -322,7 +322,7 @@ impl<'a> VULP<'a> {
         self.check_equal()?;
         self.validate_full_length()?;
         self.validate_credit_length()?;
-        Ok(self.to_owned())
+        Ok(ResultVULP::from(self.clone()))
     }
 }
 
