@@ -208,10 +208,10 @@ impl<'a> VULP<'a> {
 
             if self.config.parse_email && is_valid_email(s.as_bytes()) {
                 self.datatype = DataEnum::Email;
-            } else if self.config.parse_login && is_valid_login(s.as_bytes()) {
-                self.datatype = DataEnum::Login;
             } else if self.config.parse_number && is_valid_phone_number(s.as_bytes()) {
                 self.datatype = DataEnum::Number;
+            } else if self.config.parse_login && is_valid_login(s.as_bytes()) {
+                self.datatype = DataEnum::Login;
             } else {
                 return Err(ValidationError::FindDataTypeError);
             }
