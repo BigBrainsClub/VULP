@@ -58,7 +58,7 @@ impl<'a> VULP<'a> {
     }
 
     #[inline(always)]
-    pub fn get_parts_in_line(&mut self, input: &'a [u8]) -> Result<(), ValidationError> {
+    pub fn get_parts_in_line(&mut self, input: &[u8]) -> Result<(), ValidationError> {
         let mut process_line = SmallVec::<[u8; 128]>::new();
         process_line.resize(input.len(), 0);
 
@@ -309,7 +309,7 @@ impl<'a> VULP<'a> {
     }
 
     #[inline(always)]
-    pub fn validate(&mut self, line: &'a [u8]) -> Result<ResultVULP, ValidationError> {
+    pub fn validate(&mut self, line: &[u8]) -> Result<ResultVULP, ValidationError> {
         self.login = None;
         self.password = None;
         self.url = None;
