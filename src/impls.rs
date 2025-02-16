@@ -25,7 +25,8 @@ impl std::fmt::Display for LineEnum {
                 LineEnum::Android => "android",
                 LineEnum::Http => "http",
                 LineEnum::ReversedHttp => "reversed_http",
-                LineEnum::WithoutHttp => "without_http"
+                LineEnum::WithoutHttp => "without_http",
+                LineEnum::Unknown => "unknown",
             }
         )
     }

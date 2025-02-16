@@ -11,7 +11,8 @@ pub enum LineEnum {
     Http,
     Android,
     ReversedHttp,
-    WithoutHttp
+    WithoutHttp,
+    Unknown
 }
 
 #[derive(Debug)]

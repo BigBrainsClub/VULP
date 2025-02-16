@@ -118,7 +118,6 @@ impl<'a> VULP<'a> {
             ),
         };
 
-        
         self.login = login.map(|l| {
             if self.config.login_to_lower_case {
                 Cow::Owned(l.to_ascii_lowercase())
@@ -192,8 +191,13 @@ impl<'a> VULP<'a> {
             return Ok(());
         }
 
+        if self.config.parse_email && self.password.as_ref().map(|p| p.contains(&b'@') && is_valid_email(p)) == Some(true) {
+            (self.login, self.password) = (self.password.clone(), self.login.clone());
+            self.datatype = DataEnum::Email;
+            return Ok(())
+        }
+        
         let login = self.login.as_deref().ok_or(ValidationError::FindDataTypeError)?;
-
         let mut buffer = [MaybeUninit::<u8>::uninit(); 256];
         let len = login.len().min(255);
         
@@ -201,16 +205,16 @@ impl<'a> VULP<'a> {
             ptr::copy_nonoverlapping(login.as_ptr(), buffer.as_mut_ptr() as *mut u8, len);
             ptr::write(buffer[len].as_mut_ptr(), 0);
             
-            let s = std::str::from_utf8_unchecked(std::slice::from_raw_parts(
+            let s = std::slice::from_raw_parts(
                 buffer.as_ptr() as *const u8,
                 len
-            ));
+            );
 
-            if self.config.parse_email && is_valid_email(s.as_bytes()) {
+            if self.config.parse_email && is_valid_email(s) {
                 self.datatype = DataEnum::Email;
-            } else if self.config.parse_number && is_valid_phone_number(s.as_bytes()) {
+            } else if self.config.parse_number && is_valid_phone_number(s) {
                 self.datatype = DataEnum::Number;
-            } else if self.config.parse_login && is_valid_login(s.as_bytes()) {
+            } else if self.config.parse_login && is_valid_login(s) {
                 self.datatype = DataEnum::Login;
             } else {
                 return Err(ValidationError::FindDataTypeError);
@@ -245,7 +249,6 @@ impl<'a> VULP<'a> {
             Ok(())
         }
     }
-
     
     #[inline(always)]
     fn validate_full_length(&self) -> Result<(), ValidationError> {
@@ -315,7 +318,7 @@ impl<'a> VULP<'a> {
         self.url = None;
         self.port = None;
         self.datatype = DataEnum::Unknown;
-        self.linetype = LineEnum::WithoutHttp;
+        self.linetype = LineEnum::Unknown;
         self.get_parts_in_line(line)?;
         self.checking_bad_words_in_credits()?;
         self.find_type_credits()?;
