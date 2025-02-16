@@ -1,0 +1,10 @@
+[package]
+name = "vulp"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+vc = { git = "https://github.com/BigBrainsClub/VC" }
+memchr = "2.7.4"
+url = "2.5.4"
+smallvec = "1.14.0"
