@@ -105,3 +105,21 @@ impl<'a> Default for LocalConfig<'a> {
         }
     }
 }
+
+pub struct ResultVULP {
+    pub full_line: Vec<u8>,
+    pub credits: Vec<u8>,
+    pub datatype: DataEnum,
+    pub linetype: LineEnum,
+}
+
+impl <'a> From<VULP<'a>> for ResultVULP {
+    fn from(value: VULP) -> ResultVULP {
+        Self {
+            credits: value.credits(),
+            full_line: value.full_line().to_owned(),
+            datatype: value.datatype,
+            linetype: value.linetype
+        }
+    }
+}

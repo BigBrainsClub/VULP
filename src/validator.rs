@@ -252,7 +252,7 @@ impl<'a> VULP<'a> {
         if !self.config.check_length {
             return Ok(())
         }
-        match (self.config.length_full_line.0..=self.config.length_full_line.1).contains(&(self.full_line().as_ref().len() as u8)) {
+        match (self.config.length_full_line.0..=self.config.length_full_line.1).contains(&(self.full_line().len() as u8)) {
             true => Ok(()),
             false => Err(ValidationError::LengthError)
         }
@@ -282,7 +282,7 @@ impl<'a> VULP<'a> {
         }
     }
 
-    pub fn credits(&self) -> Cow<'a, [u8]> {
+    pub fn credits(&self) -> Vec<u8> {
         let login = self.login.as_ref().unwrap();
         let password = self.password.as_ref().unwrap();
 
@@ -291,10 +291,10 @@ impl<'a> VULP<'a> {
         result.push(b':');
         result.extend_from_slice(password);
 
-        Cow::Owned(result)
+        result
     }
 
-    pub fn full_line(&self) -> Cow<'a, [u8]> {
+    pub fn full_line(&self) -> Vec<u8> {
         let url = self.url.as_ref().unwrap();
         let credit = self.credits();
         let mut result = Vec::with_capacity(url.len() + 5 + credit.len());
@@ -305,7 +305,7 @@ impl<'a> VULP<'a> {
             result.push(b':');
         }
         result.extend_from_slice(&credit);
-        result.into()
+        result
     }
 
     #[inline(always)]
