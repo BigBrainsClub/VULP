@@ -309,7 +309,7 @@ impl<'a> VULP<'a> {
     }
 
     #[inline(always)]
-    pub fn validate(&mut self, line: &'a [u8]) -> Result<(), ValidationError> {
+    pub fn validate(&mut self, line: &'a [u8]) -> Result<Self, ValidationError> {
         self.login = None;
         self.password = None;
         self.url = None;
@@ -322,7 +322,7 @@ impl<'a> VULP<'a> {
         self.check_equal()?;
         self.validate_full_length()?;
         self.validate_credit_length()?;
-        Ok(())
+        Ok(self.to_owned())
     }
 }
 
