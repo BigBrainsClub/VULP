@@ -3,7 +3,7 @@ mod impls;
 mod schema;
 mod validator;
 
-pub use schema::{VULP, LocalConfig};
+pub use schema::{VULP, LocalConfig, ResultVULP};
 pub use enums::*;
 
 
