@@ -327,6 +327,22 @@ impl<'a> VULP<'a> {
         self.validate_credit_length()?;
         Ok(ResultVULP::from(self.clone()))
     }
+
+    #[inline(always)]
+    pub fn validate_ulp(&mut self, url: Vec<u8>, login: Vec<u8>, password: Vec<u8>) -> Result<ResultVULP, ValidationError> {
+        self.login = Some(std::borrow::Cow::Owned(login));
+        self.password = Some(std::borrow::Cow::Owned(password));
+        let (linetype, url) = Self::get_type(&url);
+        self.linetype = linetype;
+        self.url = Some(std::borrow::Cow::Owned(url.to_vec()));
+        self.checking_bad_words_in_credits()?;
+        self.find_type_credits()?;
+        self.check_equal()?;
+        self.validate_full_length()?;
+        
+        self.validate_credit_length()?;
+        Ok(ResultVULP::from(self.clone()))
+    }
 }
 
 #[inline(always)]
