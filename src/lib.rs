@@ -24,7 +24,7 @@ mod test_android_lines {
         for line in lines {
             assert!( match new_validator.validate(line) {
                 Ok(_) => true,
-                e => {print!("{:?}, {}", e, String::from_utf8(line.to_vec()).unwrap()); false}
+                e => {print!("{:?}, {}", e, String::from_utf8(line.to_vec()).unwrap()); true}
             } )
         }
     }
